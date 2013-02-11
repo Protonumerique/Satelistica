@@ -22,7 +22,7 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Luis Bustamante http://protonumerique.net
- * @modified    01/30/2013
+ * @modified    02/06/2013
  * @version     0.1.1 (1)
 */
 
@@ -66,9 +66,12 @@ public class Location extends GPS {
 		
 		heightAMSL = h;
 		
-		altitude = EARTH_RADIUS + heightAMSL;
+		latitude = lat;
+	    longitude = lon;
+		//altitude = EARTH_RADIUS + heightAMSL*0.001F; //convert height from Meters to kilometers
 		
 		GSPos= new GroundStationPosition(latitude, longitude, heightAMSL);
+		setCoordinates(latitude, longitude, heightAMSL*0.001F);
 		
 		this.name = name;
 	}
@@ -88,7 +91,7 @@ public class Location extends GPS {
 		processElevation(app);
 		
 		GSPos= new GroundStationPosition(latitude, longitude, heightAMSL);
-		setCoordinates(latitude, longitude, heightAMSL*0.001F);//convert height to kilometers
+		setCoordinates(latitude, longitude, heightAMSL*0.001F);//convert height from Meters to kilometers
 		CartesianPos = computePosOnSphere();
 		this.name = name;
 	}
@@ -100,7 +103,7 @@ public class Location extends GPS {
 	
 	public Location(){
 		super();
-		heightAMSL = 0.034F;
+		heightAMSL = 34F;
 		
 		altitude = EARTH_RADIUS + heightAMSL*0.001F;//convert to kilometers
 		
@@ -170,15 +173,15 @@ public class Location extends GPS {
 			  String query = elevationURL + latitude +","+ longitude;//+extraParams;
 			  //try {
 			  String response = app.loadStrings( query )[0];
-			  double elevation = 0.0;
+			  double locAltitude = 0.0;
 			  if ( response != null ) {
 			    try {
 	
 			      JSONObject results = new JSONObject( response );
 			      JSONObject profile = results.getJSONArray( "elevationProfile" ).getJSONObject(0);
 			      double el = profile.getDouble("height");
-			      elevation = el;
-			      //PApplet.println(elevation);
+			      locAltitude = el;
+			      PApplet.println("Altitude: " + locAltitude);
 			    } 
 			    catch (Exception e) {
 			    	PApplet.println(e);
@@ -189,7 +192,7 @@ public class Location extends GPS {
 			  else  if ( response == null ) {
 				  PApplet.println("wRONG: " + query);
 			  }
-			  heightAMSL = (float)elevation;
+			  heightAMSL = (float)locAltitude;
 			  
 			  /*}catch(Exception e){
 				  

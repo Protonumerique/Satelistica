@@ -21,7 +21,7 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Luis Bustamante http://protonumerique.net
- * @modified    01/30/2013
+ * @modified    02/06/2013
  * @version     0.1.1 (1)
 */
 package satelistica; 

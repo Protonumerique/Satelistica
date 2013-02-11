@@ -21,7 +21,7 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Luis Bustamante http://protonumerique.net
- * @modified    01/30/2013
+ * @modified    02/06/2013
  * @version     0.1.1 (1)
 */
 
@@ -42,6 +42,7 @@ public class Sat extends GPS{
 	public Location location;
 	public TLE element;
 	SatPos position;
+	public String type;
 	
 	
 	Sat(String[]tle){
@@ -166,6 +167,24 @@ public class Sat extends GPS{
 		position.setTime(d);
 		
 	}
+	
+	/**
+     *  set the type of satellite
+     */
+	public void setType(String t){
+		type = t;
+		
+	}
+	
+	/**
+     *  get the type of satellite
+     */
+	public String getType(){
+		return type;
+		
+	}
+	
+	
 	 
 	
 }

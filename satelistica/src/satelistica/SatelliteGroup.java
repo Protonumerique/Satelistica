@@ -28,6 +28,7 @@ public class SatelliteGroup {
 	public ArrayList<Sat> satellites;
 	public ArrayList<Sat> onSight;
 	public String locationName;
+	public ArrayList<String> types;
 	
 	
 	public final static String VERSION = "0.1.1";
@@ -103,6 +104,7 @@ public class SatelliteGroup {
 		  tlelist = new ArrayList<TLE>();
 		  satellites = new ArrayList<Sat>();
 		  onSight = new ArrayList<Sat>();
+		  types = new ArrayList<String>();
 
 		  final String [] tle = new String [3];
 		  int cnt =0;
@@ -274,6 +276,7 @@ public class SatelliteGroup {
 		  for (Iterator<TLE> i = tlelist.iterator(); i.hasNext();) {
 			
 		    Sat sat = new Sat(i.next()); 
+		   
 		    //sat.beginTrack(location);
 		    satellites.add(sat);
 		  }
@@ -297,7 +300,26 @@ public class SatelliteGroup {
 	
 	/**
 	 * 
-	 * Call every loop to keep updating satellite position based on the loaded TLE
+	 * Call every loop to keep updating satellite position based on the loaded TLE and the desired date
+	 * 
+	 */
+	
+	public void track(Date d){
+		
+		for (Iterator<Sat> i = satellites.iterator(); i.hasNext();) {
+			
+			Sat psat = (Sat)i.next();
+			psat.updateCoordinates(d);
+			psat.updatePosition();
+			psat.updateScreenPosition(myParent);
+			
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * Call every loop to keep updating satellite position based on the loaded TLE and the default system's Date
 	 * 
 	 */
 	
@@ -411,8 +433,17 @@ public class SatelliteGroup {
 	 * 
 	 * @return Boolean
 	 */
-	public boolean hasSats() {
+	public boolean hasPassingSats() {
 		 return(onSight.size()>0);
+	}
+	
+	/**
+	 * return if the Group is empty or not.
+	 * 
+	 * @return Boolean
+	 */
+	public boolean hasSats() {
+		 return(satellites.size()>0);
 	}
 	
 	/**
@@ -443,8 +474,13 @@ public class SatelliteGroup {
 	 * 
 	 * @return String
 	 */
-	public static String version() {
-		return VERSION;
+	public  void addType(String e) {
+		types.add(e);
+		for (Iterator<Sat> i = satellites.iterator(); i.hasNext();) {
+			
+			Sat sat = (Sat)i.next();
+			if(sat.getType() == null)sat.setType(e);
+		}
 	}
 	/**
 	 * 
